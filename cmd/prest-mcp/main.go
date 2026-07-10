@@ -28,7 +28,7 @@ func runMain(in io.Reader, out, errOut io.Writer) int {
 
 	cfg, err := config.Load()
 	if err != nil {
-		fmt.Fprintf(errOut, "prest-mcp: %v\n", err)
+		_, _ = fmt.Fprintf(errOut, "prest-mcp: %v\n", err)
 		return 1
 	}
 
@@ -43,7 +43,7 @@ func runMain(in io.Reader, out, errOut io.Writer) int {
 	log.Info("prest-mcp started", "url", cfg.URL, "timeout", cfg.Timeout.String())
 
 	if err := run(ctx, p, stdio); err != nil && err != io.EOF && err != context.Canceled {
-		fmt.Fprintf(errOut, "prest-mcp: %v\n", err)
+		_, _ = fmt.Fprintf(errOut, "prest-mcp: %v\n", err)
 		return 1
 	}
 	return 0

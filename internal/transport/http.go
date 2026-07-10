@@ -47,7 +47,7 @@ func (f *HTTPForwarder) Post(ctx context.Context, body []byte) (Response, error)
 	if err != nil {
 		return Response{}, fmt.Errorf("POST %s: %w", f.url, err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
