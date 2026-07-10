@@ -40,7 +40,7 @@ go install github.com/prest/prest-mcp-adapter/cmd/prest-mcp@latest
 ### Docker / OCI
 
 ```bash
-docker pull ghcr.io/prest/prest-mcp-adapter:0.1.0
+docker pull ghcr.io/prest/prest-mcp-adapter:0.1.3
 ```
 
 ## Local usage
@@ -62,7 +62,7 @@ prest-mcp
 ```bash
 docker run --rm -i \
   -e PREST_MCP_URL=http://host.docker.internal:3000/_mcp \
-  ghcr.io/prest/prest-mcp-adapter:0.1.0
+  ghcr.io/prest/prest-mcp-adapter:0.1.3
 ```
 
 ## MCP client configuration
