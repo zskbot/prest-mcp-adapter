@@ -92,6 +92,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: dist
+          pattern: prest-mcp-*
           merge-multiple: true
 
       - name: Create GitHub Release
