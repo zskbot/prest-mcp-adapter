@@ -1,0 +1,70 @@
+---
+description: prest-mcp-adapter agentic develop→validate loop — follow on every coding task
+alwaysApply: true
+---
+
+# prest-mcp-adapter Agentic Development Loop
+
+Follow this loop on **every** development task. For conventions, see **@.github/copilot-instructions.md**.
+
+## The Loop
+
+```
+Understand → Locate → Plan → Implement → Validate → Self-review → (iterate)
+```
+
+### 1. Understand
+
+- Restate the goal: this repo is a **dumb stdio→HTTP bridge** to pREST `/_mcp`.
+- Check `go.mod` for the Go version before choosing APIs.
+- Do **not** add schema/SQL/tool business logic unless explicitly requested.
+
+### 2. Locate
+
+| Path | Role |
+|------|------|
+| `cmd/prest-mcp/` | Entrypoint |
+| `internal/config/` | Env loading |
+| `internal/transport/` | Stdio NDJSON + HTTP POST |
+| `internal/proxy/` | Forward + JSON-RPC error synthesis |
+| `internal/logging/` | slog → stderr |
+
+### 3. Plan
+
+- Smallest diff that solves the task.
+- Keep stdout protocol-only; logs on stderr.
+- Fail closed on missing/invalid `PREST_MCP_URL`.
+
+### 4. Implement
+
+| Area | Rule |
+|------|------|
+| **Scope** | Tiny transport bridge; no pREST domain logic |
+| **State** | Inject deps via constructors; no package-level mutable app state |
+| **Errors** | Wrap with `%w`; use `slog` on stderr |
+| **Formatting** | `gofmt` |
+
+### 5. Validate
+
+```sh
+go build ./...
+go vet ./...
+gofmt -l .
+make test       # includes overall coverage >= 80%
+```
+
+### 6. Self-review
+
+- [ ] Diff is minimal
+- [ ] No logs on stdout
+- [ ] Config fail-closed for required URL
+- [ ] New behavior has unit tests (httptest / buffers)
+- [ ] Overall statement coverage stays ≥80%
+- [ ] Validation commands passed
+
+## Definition of Done
+
+1. `go build ./...` and `go vet ./...` pass
+2. `make test` passes (`-race -timeout 30s` + overall coverage ≥80%)
+3. Self-review checklist is green
+4. No scope creep
